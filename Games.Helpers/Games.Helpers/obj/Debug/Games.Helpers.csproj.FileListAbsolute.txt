@@ -1,0 +1,9 @@
+C:\Users\szlas\source\repos\Games.Helpers\Games.Helpers\bin\Debug\Games.Helpers.dll
+C:\Users\szlas\source\repos\Games.Helpers\Games.Helpers\bin\Debug\Games.Helpers.pdb
+C:\Users\szlas\source\repos\Games.Helpers\Games.Helpers\bin\Debug\Newtonsoft.Json.dll
+C:\Users\szlas\source\repos\Games.Helpers\Games.Helpers\bin\Debug\Newtonsoft.Json.xml
+C:\Users\szlas\source\repos\Games.Helpers\Games.Helpers\obj\Debug\Games.Helpers.csproj.AssemblyReference.cache
+C:\Users\szlas\source\repos\Games.Helpers\Games.Helpers\obj\Debug\Games.Helpers.csproj.CoreCompileInputs.cache
+C:\Users\szlas\source\repos\Games.Helpers\Games.Helpers\obj\Debug\Games.Helpers.csproj.CopyComplete
+C:\Users\szlas\source\repos\Games.Helpers\Games.Helpers\obj\Debug\Games.Helpers.dll
+C:\Users\szlas\source\repos\Games.Helpers\Games.Helpers\obj\Debug\Games.Helpers.pdb

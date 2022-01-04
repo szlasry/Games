@@ -1,0 +1,13 @@
+﻿@if (Request.Cookies["user"] == null)
+{
+    <h6>Navigation Links</h6>
+    <div> @Html.ActionLink("Main page", "Index", "Home")  </div>
+    <div> @Html.ActionLink("About Us", "AboutUs", "Home")  </div>
+}
+else
+{
+    <h6>Navigation Links</h6>
+    <div> @Html.ActionLink("Add Game", "AddGame", "Home")</div>
+}
+
+

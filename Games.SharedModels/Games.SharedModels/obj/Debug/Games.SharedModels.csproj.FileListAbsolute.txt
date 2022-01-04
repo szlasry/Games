@@ -1,0 +1,6 @@
+C:\Users\szlas\source\repos\Games.SharedModels\Games.SharedModels\obj\Debug\Games.SharedModels.csproj.CoreCompileInputs.cache
+C:\Users\szlas\source\repos\Games.SharedModels\Games.SharedModels\bin\Debug\Games.SharedModels.dll
+C:\Users\szlas\source\repos\Games.SharedModels\Games.SharedModels\bin\Debug\Games.SharedModels.pdb
+C:\Users\szlas\source\repos\Games.SharedModels\Games.SharedModels\obj\Debug\Games.SharedModels.dll
+C:\Users\szlas\source\repos\Games.SharedModels\Games.SharedModels\obj\Debug\Games.SharedModels.pdb
+C:\Users\szlas\source\repos\Games.SharedModels\Games.SharedModels\obj\Debug\Games.SharedModels.csproj.AssemblyReference.cache

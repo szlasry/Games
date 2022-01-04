@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <nav class="navbar-dark bg-dark text-center ">
+        <div class="container">
+            <div class="navbar-brand  font-weight-bold" style="color:lightblue;"> Bonus.com </div>
+            <div class="navbar-brand  font-weight-bold " style="color:lightsalmon;"> @ViewBag.Title</div>
+            <div class="navbar-brand  font-weight-bold text-right " style="color:lightseagreen;"> By SzL ⓒ</div>
+        </div>
+    </nav>
+
+    <div class="container-fluid text-center">
+        <div class="row content ">
+            <div class="col-sm-2 sidenav" style="font-size:10px; ">
+                <div style="background-color:white">
+                    @Html.Partial("_UserPassLoggedIn", new Games.Client.Models.LoginViewModel())
+                </div>
+                <div></div>
+                <div></div>
+                <div style="background-color:white">
+                    @Html.Partial("_LinksLoggedIn")
+                </div>
+            </div>
+            <div class="col-sm-10" style="font-size:20px;">
+                 @RenderBody()
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+

@@ -1,0 +1,28 @@
+﻿@model Games.SharedModels.ViewModel.GameViewModels.GameViewModel
+<div class="card" style="width:15rem; height:35rem;">
+    <img style="height:250px;" class="img-fluid" src="@Model.Image">
+    <div class="card-body">
+        <h5 class="card-title" style="font-size: 15px;">@Model.Name </h5>
+        <hr />
+        <p class="card-text" style="font-size: 15px;">Number of Players: @Model.NumberOfPlayers.</p>
+        <hr />
+        <a href="@Model.URL" target="_blank">Play @Model.Name</a>
+        <hr />
+        @if (Request.Cookies["user"] == null)
+        {
+            <h4>Login to do shit</h4>
+        }
+        else
+        {
+    <div>@Html.ActionLink("Delete Game", "DeleteGameRequest", new { Id = Model.Id })</div>  
+            @Html.ActionLink("Update Game", "UpdateGame", new { Id = Model.Id })
+        }
+
+
+    </div>
+    <div class="card-body">
+        @*<p><a href="http://chess.com/">Play Chess</a></p>*@
+        @*<div> @Html.ActionLink("Add To Cart", "AddToCart", "Product", new { Id = Model.Id }, null)  </div>*@
+
+    </div>
+</div>

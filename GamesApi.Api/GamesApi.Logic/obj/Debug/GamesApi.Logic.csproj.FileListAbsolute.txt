@@ -1,0 +1,11 @@
+C:\Users\szlas\source\repos\GamesApi.api\GamesApi.Logic\bin\Debug\GamesApi.Logic.dll
+C:\Users\szlas\source\repos\GamesApi.api\GamesApi.Logic\bin\Debug\GamesApi.Logic.pdb
+C:\Users\szlas\source\repos\GamesApi.api\GamesApi.Logic\bin\Debug\Dapper.dll
+C:\Users\szlas\source\repos\GamesApi.api\GamesApi.Logic\bin\Debug\GamesApi.Models.dll
+C:\Users\szlas\source\repos\GamesApi.api\GamesApi.Logic\bin\Debug\GamesApi.Models.pdb
+C:\Users\szlas\source\repos\GamesApi.api\GamesApi.Logic\bin\Debug\Dapper.xml
+C:\Users\szlas\source\repos\GamesApi.api\GamesApi.Logic\obj\Debug\GamesApi.Logic.csproj.AssemblyReference.cache
+C:\Users\szlas\source\repos\GamesApi.api\GamesApi.Logic\obj\Debug\GamesApi.Logic.csproj.CoreCompileInputs.cache
+C:\Users\szlas\source\repos\GamesApi.api\GamesApi.Logic\obj\Debug\GamesApi.Logic.csproj.CopyComplete
+C:\Users\szlas\source\repos\GamesApi.api\GamesApi.Logic\obj\Debug\GamesApi.Logic.dll
+C:\Users\szlas\source\repos\GamesApi.api\GamesApi.Logic\obj\Debug\GamesApi.Logic.pdb

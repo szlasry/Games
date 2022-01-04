@@ -1,0 +1,55 @@
+﻿@model Games.SharedModels.Requests.PlayerRequests.AddPlayerRequest
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @using (Html.BeginForm("AddPlayerRequest", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <table cellpadding="1" cellspacing="1">
+
+            <tr>
+                <td>@Html.LabelFor(p => p.UserName)</td>
+                <td>
+                    @Html.EditorFor(p => p.UserName)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(p => p.UserName)
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(p => p.Password)</td>
+                <td>
+                    @Html.EditorFor(m => m.Password)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(p => p.Password)
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(p => p.Country)</td>
+                <td>
+                    @Html.EditorFor(m => m.Country)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(p => p.Country)
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(p => p.Birthday)</td>
+                <td>
+                    @Html.EditorFor(m => m.Birthday)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(p => p.Birthday)
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Submit" /></td>
+            </tr>
+        </table>
+    }
+</div>
+

@@ -1,0 +1,49 @@
+﻿@model Games.Client.Models.LoginViewModel
+
+@if (Request.Cookies["user"] == null)
+{
+<div>
+    @using (Html.BeginForm("Login", "Home"))
+    {
+        <p style="font-size:8px;">  @Html.LabelFor(p => p.UserName)   </p>
+        <p style="font-size:8px;"> @Html.EditorFor(p => p.UserName)  </p>
+        <p style="font-size:8px;">  @Html.ValidationMessageFor(p => p.UserName)  </p>
+        <p style="font-size:8px;">  @Html.LabelFor(p => p.Password)   </p>
+        <p style="font-size:8px;"> @Html.EditorFor(p => p.Password) </p>
+        <p style="font-size:8px;"> @Html.ValidationMessageFor(p => p.Password)   </p>
+        <p><input type="submit" value="Log in" style="font-size:8px;" /></p>
+    }
+    <p>
+        <input type="button" value="Register" style="font-size:8px;" onclick="@("window.location.href='" + @Url.Action("AddPlayer", "Home") + "'");" />
+    </p>
+</div>
+}
+else
+{
+<div>
+    @using (Html.BeginForm("LogOut", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <p>
+            Welcome @Request.Cookies["user"]["UserName"]
+        </p>
+
+        <p>
+            <input type="submit" value="Log Out" style="font-size:8px;" />
+        </p>
+    }
+</div>
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
