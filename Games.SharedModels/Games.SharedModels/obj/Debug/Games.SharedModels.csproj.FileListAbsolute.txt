@@ -6,7 +6,7 @@ C:\Users\szlas\source\repos\Games.SharedModels\Games.SharedModels\obj\Debug\Game
 C:\Users\szlas\source\repos\Games.SharedModels\Games.SharedModels\obj\Debug\Games.SharedModels.csproj.AssemblyReference.cache
 C:\Users\szlas\Documents\Projects\Games\Games.SharedModels\Games.SharedModels\bin\Debug\Games.SharedModels.dll
 C:\Users\szlas\Documents\Projects\Games\Games.SharedModels\Games.SharedModels\bin\Debug\Games.SharedModels.pdb
-C:\Users\szlas\Documents\Projects\Games\Games.SharedModels\Games.SharedModels\obj\Debug\Games.SharedModels.csproj.AssemblyReference.cache
 C:\Users\szlas\Documents\Projects\Games\Games.SharedModels\Games.SharedModels\obj\Debug\Games.SharedModels.csproj.CoreCompileInputs.cache
 C:\Users\szlas\Documents\Projects\Games\Games.SharedModels\Games.SharedModels\obj\Debug\Games.SharedModels.dll
 C:\Users\szlas\Documents\Projects\Games\Games.SharedModels\Games.SharedModels\obj\Debug\Games.SharedModels.pdb
+C:\Users\szlas\Documents\Projects\Games\Games.SharedModels\Games.SharedModels\obj\Debug\Games.SharedModels.csproj.AssemblyReference.cache

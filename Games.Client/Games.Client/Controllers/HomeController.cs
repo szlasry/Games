@@ -18,7 +18,7 @@ namespace Games.Client.Controllers
 {
     public class HomeController : Controller
     {
-        public string BaseUri = "https://localhost:44322/api/";
+        public string BaseUri = "https://localhost:44367/api/";
         // GET: Home
         public async Task<ActionResult> Index()
         {
@@ -107,7 +107,7 @@ namespace Games.Client.Controllers
         {
             string serializedPlayer = JsonConvert.SerializeObject(myPlayer);
             HttpHelper httpHelper = new HttpHelper();
-            string response = await httpHelper.SendPostRequest("https://localhost:44322/api/Player/AddPlayer", serializedPlayer);
+            string response = await httpHelper.SendPostRequest($"{BaseUri}Player/AddPlayer", serializedPlayer);
             BaseResponse baseResponse = JsonConvert.DeserializeObject<BaseResponse>(response);
             if (baseResponse.IsSuccess)
             {
@@ -124,7 +124,7 @@ namespace Games.Client.Controllers
         {
             string serializedPlayer = JsonConvert.SerializeObject(player);
             HttpHelper httpHelper = new HttpHelper();
-            string response = await httpHelper.SendPostRequest("https://localhost:44322/api/Player/LogIn", serializedPlayer);
+            string response = await httpHelper.SendPostRequest($"{BaseUri}Player/LogIn", serializedPlayer);
             LoginPlayerResponse loginPlayerResponse = JsonConvert.DeserializeObject<LoginPlayerResponse>(response);
             if (loginPlayerResponse.IsSuccess)
             {
@@ -144,7 +144,7 @@ namespace Games.Client.Controllers
                 UserName = Request.Cookies["user"]["UserName"]
             });
             HttpHelper httpHelper = new HttpHelper();
-            string response = await httpHelper.SendPostRequest("https://localhost:44322/api/Player/LogOut", serializedPlayer);
+            string response = await httpHelper.SendPostRequest($"{BaseUri}Player/LogOut", serializedPlayer);
             BaseResponse baseResponse = JsonConvert.DeserializeObject<BaseResponse>(response);
             if (baseResponse.IsSuccess)
             {
