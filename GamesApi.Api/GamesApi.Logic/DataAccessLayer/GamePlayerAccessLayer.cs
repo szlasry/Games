@@ -106,12 +106,14 @@ namespace GamesApi.Logic.DataAccessLayer
                 return db.Query("USP_GetPlayers", p, commandType: CommandType.StoredProcedure).Select(a => new Player()
                 {
                     Id = a.Id,
-                    UserName = a.UserName,
                     Password = a.Password,
+                    UserName = a.UserName,
                     Country = a.Country,
                     Birthday = a.Birthday,
                     IsLoggedIn = a.IsLoggedIn,
-                    IsAdmin = a.IsAdmin??false
+                    IsAdmin = a.IsAdmin??false,
+                    Token = a.Token,
+                    LastSessionTime = a.LastSessionTime
                 }).ToList();
             });
         }
@@ -128,7 +130,9 @@ namespace GamesApi.Logic.DataAccessLayer
                     Country = a.Country,
                     Birthday = a.Birthday,
                     IsLoggedIn = a.IsLoggedIn,
-                    IsAdmin = a.IsAdmin??false
+                    IsAdmin = a.IsAdmin??false,
+                    Token = a.Token,
+                    LastSessionTime = a.LastSessionTime
                 }).FirstOrDefault();
             });
         }

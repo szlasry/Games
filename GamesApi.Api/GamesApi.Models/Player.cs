@@ -15,6 +15,8 @@ namespace GamesApi.Models
         public DateTime Birthday { get; set; }
         public bool IsLoggedIn { get; set; }
         public bool IsAdmin { get; set; }
+        public string Token { get; set; }
+        public DateTime? LastSessionTime { get; set; }
 
     }
 }

@@ -21,7 +21,7 @@ namespace GamesApi.Logic
         }
         public List<Game> GetGames()
         {
-           return _gamePlayerAccessLayer.GetGames();
+            return _gamePlayerAccessLayer.GetGames();
         }
         public Game GetGame(int id)
         {
@@ -33,7 +33,7 @@ namespace GamesApi.Logic
         }
         public bool UpdateGame(Game game)
         {
-          return _gamePlayerAccessLayer.UpdateGame(game);
+            return _gamePlayerAccessLayer.UpdateGame(game);
         }
         public void AddPlayer(Player player)
         {
@@ -62,7 +62,7 @@ namespace GamesApi.Logic
             List<string> listOfPlayers = _gamePlayerAccessLayer.GetPlayers().Select(a => a.UserName).ToList();
             foreach (string name in listOfPlayers)
             {
-                if(name == userName)
+                if (name.ToLower() == userName.ToLower())
                 {
                     return true;
                 }
@@ -74,7 +74,7 @@ namespace GamesApi.Logic
             List<Game> listOfGames = _gamePlayerAccessLayer.GetGames();
             foreach (Game game in listOfGames)
             {
-                if(game.Name == gameName)
+                if (game.Name == gameName)
                 {
                     return true;
                 }
@@ -104,6 +104,39 @@ namespace GamesApi.Logic
 
             }
             return false;
+        }
+        public bool ValidateTokenMatches(string userName, string token)
+        {
+            List<Player> listOfPlayers = _gamePlayerAccessLayer.GetPlayers();
+            foreach (Player player in listOfPlayers)
+            {
+                if (player.UserName == userName && player.Token == token)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool ValidateTokenExpiration(string userName, string token)
+        {
+            List<Player> listOfPlayers = _gamePlayerAccessLayer.GetPlayers();
+            foreach (Player player in listOfPlayers)
+            {
+                if (player.UserName == userName && player.Token == token && player.LastSessionTime < DateTime.UtcNow.AddMinutes(-30))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public bool ValidatePlayerIsAdmin(string userName)
+        {
+            Player player = GetPlayers().FirstOrDefault(a => a.UserName == userName);
+            if (player == null)
+            {
+                return false;
+            }
+            return player.IsAdmin;
         }
     }
 }

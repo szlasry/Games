@@ -1,5 +1,7 @@
 ﻿using Games.Client.Models;
 using Games.Helpers;
+using Games.SharedModels;
+using Games.SharedModels.Requests.GameRequests;
 using Games.SharedModels.Requests.PlayerRequests;
 using Games.SharedModels.Responses;
 using Games.SharedModels.Responses.GameResponses;
@@ -22,6 +24,8 @@ namespace Games.Client.Controllers
         // GET: Home
         public async Task<ActionResult> Index()
         {
+
+
             HttpHelper httpHelper = new HttpHelper();
             string serializedResponse = await httpHelper.SendGetRequest($"{BaseUri}Game/GetGames");
             GetGamesResponse gamesResponse = JsonConvert.DeserializeObject<GetGamesResponse>(serializedResponse);
@@ -40,9 +44,19 @@ namespace Games.Client.Controllers
         {
             return View("AddGameView", new GameViewModel());
         }
-        public async Task<ActionResult> SendGameRequest(GameViewModel game)
+        public async Task<ActionResult> AddGameRequest(GameViewModel game)  
         {
-            string serializedGame = JsonConvert.SerializeObject(game);
+            string token = Request.Cookies["user"]["Token"];
+            string userName = Request.Cookies["user"]["UserName"];
+            string serializedGame = JsonConvert.SerializeObject(new AddGameRequest()
+            {
+                Image = game.Image,
+                Name = game.Name,
+                NumberOfPlayers = game.NumberOfPlayers,
+                URL = game.URL,
+                Token = token,
+                UserName = userName
+            });
             HttpHelper httpHelper = new HttpHelper();
             string response = await httpHelper.SendPostRequest($"{BaseUri}Game/AddGame", serializedGame);
             BaseResponse baseResponse = JsonConvert.DeserializeObject<BaseResponse>(response);
@@ -57,8 +71,10 @@ namespace Games.Client.Controllers
         }
         public async Task<ActionResult> DeleteGameRequest(int Id)
         {
+            string token = Request.Cookies["user"]["Token"];
+            string userName = Request.Cookies["user"]["UserName"];
             HttpHelper httpHelper = new HttpHelper();
-            string response = await httpHelper.SendDeleteRequest($"{BaseUri}Game/DeleteGame?id={Id}");
+            string response = await httpHelper.SendDeleteRequest($"{BaseUri}Game/DeleteGame?id={Id}&username={userName}&token={token}");
             BaseResponse baseResponse = JsonConvert.DeserializeObject<BaseResponse>(response);
             if (baseResponse.IsSuccess)
             {
@@ -86,8 +102,19 @@ namespace Games.Client.Controllers
         }
         public async Task<ActionResult> UpdateGameRequest(GameViewModel game)
         {
+            string token = Request.Cookies["user"]["Token"];
+            string userName = Request.Cookies["user"]["UserName"];
             HttpHelper httpHelper = new HttpHelper();
-            string serializedGame = JsonConvert.SerializeObject(game);
+            string serializedGame = JsonConvert.SerializeObject(new UpdateGameRequest()
+            {
+                Id = game.Id,
+                Image = game.Image,
+                Name = game.Name,
+                NumberOfPlayers = game.NumberOfPlayers,
+                URL = game.URL,
+                Token = token,
+                UserName = userName
+            });
             string response = await httpHelper.SendPutRequest($"{BaseUri}Game/UpdateGame", serializedGame);
             BaseResponse baseResponse = JsonConvert.DeserializeObject<BaseResponse>(response);
             if (baseResponse.IsSuccess)
@@ -112,7 +139,7 @@ namespace Games.Client.Controllers
             if (baseResponse.IsSuccess)
             {
 
-                return RedirectToAction("Login", new {  UserName = myPlayer.UserName, Password = myPlayer.Password  });
+                return RedirectToAction("Login", new { UserName = myPlayer.UserName, Password = myPlayer.Password });
             }
             else
             {
@@ -126,6 +153,7 @@ namespace Games.Client.Controllers
             HttpHelper httpHelper = new HttpHelper();
             string response = await httpHelper.SendPostRequest($"{BaseUri}Player/LogIn", serializedPlayer);
             LoginPlayerResponse loginPlayerResponse = JsonConvert.DeserializeObject<LoginPlayerResponse>(response);
+            // 
             if (loginPlayerResponse.IsSuccess)
             {
                 AddCookie(player.UserName, loginPlayerResponse.Token);
@@ -141,7 +169,8 @@ namespace Games.Client.Controllers
         {
             string serializedPlayer = JsonConvert.SerializeObject(new
             {
-                UserName = Request.Cookies["user"]["UserName"]
+                UserName = Request.Cookies["user"]["UserName"],
+                Token = Request.Cookies["user"]["Token"]
             });
             HttpHelper httpHelper = new HttpHelper();
             string response = await httpHelper.SendPostRequest($"{BaseUri}Player/LogOut", serializedPlayer);
@@ -162,7 +191,7 @@ namespace Games.Client.Controllers
             HttpCookie myCookie = new HttpCookie("user");
             myCookie["UserName"] = userName;
             myCookie["Token"] = token;
-            myCookie.Expires = DateTime.Now.AddDays(10);
+           // myCookie.Expires = DateTime.Now.AddDays(10);
             Response.Cookies.Add(myCookie);
 
         }

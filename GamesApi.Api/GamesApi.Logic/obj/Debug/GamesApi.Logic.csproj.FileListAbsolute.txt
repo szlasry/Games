@@ -18,3 +18,5 @@ C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Logic\obj\Debug\Ga
 C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Logic\obj\Debug\GamesApi.Logic.csproj.CopyComplete
 C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Logic\obj\Debug\GamesApi.Logic.dll
 C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Logic\obj\Debug\GamesApi.Logic.pdb
+C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Logic\bin\Debug\Dapper.dll
+C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Logic\bin\Debug\Dapper.xml

@@ -72,3 +72,4 @@ C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Api\bin\Dapper.dll
 C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Api\bin\Games.SharedModels.pdb
 C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Api\bin\GamesApi.Logic.pdb
 C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Api\bin\GamesApi.Models.pdb
+C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Api\bin\Dapper.xml

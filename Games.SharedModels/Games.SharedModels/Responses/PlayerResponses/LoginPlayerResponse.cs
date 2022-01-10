@@ -8,6 +8,7 @@ namespace Games.SharedModels.Responses.PlayerResponses
 {
     public class LoginPlayerResponse : BaseResponse
     {
+        public PlayerResponses P { get; set; }
         public string Token { get; set; }
     }
 }

@@ -217,7 +217,6 @@ namespace GamesApi.Api.Controllers
                     ErrorMessage = null,
                     IsSuccess = true,
                     Token = token
-
                 };
             }
             catch (Exception ex)

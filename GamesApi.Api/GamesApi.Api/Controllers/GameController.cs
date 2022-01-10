@@ -27,6 +27,11 @@ namespace GamesApi.Api.Controllers
         {
             try
             {
+                BaseResponse baseResponse = ValidateToken(request.UserName, request.Token);
+                if (!baseResponse.IsSuccess)
+                {
+                    return baseResponse;
+                }
                 bool doesExist = _gamePlayerLogic.ValidateGameExists(request.Name);
                 if (doesExist)
                 {
@@ -34,6 +39,16 @@ namespace GamesApi.Api.Controllers
                     {
                         ErrorCode = 6000,
                         ErrorMessage = "Game already exists in our DB",
+                        IsSuccess = false
+                    };
+                }
+                bool isUserAdmin = _gamePlayerLogic.ValidatePlayerIsAdmin(request.UserName);
+                if (!isUserAdmin)
+                {
+                    return new BaseResponse()
+                    {
+                        ErrorCode = 7000,
+                        ErrorMessage = "You ain't no admin",
                         IsSuccess = false
                     };
                 }
@@ -67,6 +82,7 @@ namespace GamesApi.Api.Controllers
         {
             try
             {
+
                 List<Game> listOfGames = _gamePlayerLogic.GetGames();
                 return new GetGamesResponse()
                 {
@@ -128,17 +144,22 @@ namespace GamesApi.Api.Controllers
             }
         }
         [HttpDelete]
-        //https://localhost:44322/api/Game/DeleteGame?id=
-        public BaseResponse DeleteGame(int id)
+        //https://localhost:44322/api/Game/DeleteGame?id=&username=&token=
+        public BaseResponse DeleteGame(int id, string userName, string token)
         {
             try
             {
-                _gamePlayerLogic.DeleteGame(id);
+                BaseResponse baseResponse = ValidateToken(userName, token);
+                if (baseResponse.IsSuccess)
+                {
+                    _gamePlayerLogic.DeleteGame(id);
+                    return baseResponse;
+                }
                 return new BaseResponse()
                 {
                     ErrorCode = 0,
-                    ErrorMessage = null,
-                    IsSuccess = true
+                    ErrorMessage = "Failure",
+                    IsSuccess = false
                 };
             }
             catch (Exception ex)
@@ -184,7 +205,44 @@ namespace GamesApi.Api.Controllers
                 };
             }
         }
+        private BaseResponse ValidateToken(string userName, string token)
+        {
 
-            
+            bool doesExist = _gamePlayerLogic.ValidateUsernameExists(userName);
+            if (!doesExist)
+            {
+                return new BaseResponse()
+                {
+                    ErrorCode = 6000,
+                    ErrorMessage = "Username does not exist in our DB, get fucked",
+                    IsSuccess = false
+                };
+            }
+            // add here  validation isloggedin.
+            bool doesTokenMatch = _gamePlayerLogic.ValidateTokenMatches(userName, token);
+            if (!doesTokenMatch)
+            {
+                return new BaseResponse()
+                {
+                    ErrorCode = 6000,
+                    ErrorMessage = "Token does not exist in our DB, get fucked",
+                    IsSuccess = false
+                };
+            }
+            bool didTokenExpire = _gamePlayerLogic.ValidateTokenExpiration(userName, token);
+            if (!didTokenExpire)
+            {
+                return new BaseResponse()
+                {
+                    ErrorCode = 6000,
+                    ErrorMessage = "Session expired, get fucked",
+                    IsSuccess = false
+                };
+            }
+            return new BaseResponse() 
+            {
+                IsSuccess = true
+            };
+        }
     }
 }
