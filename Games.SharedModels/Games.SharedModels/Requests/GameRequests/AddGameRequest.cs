@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Games.SharedModels.ViewModel.GameViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,6 @@ namespace Games.SharedModels.Requests.GameRequests
 {
     public class AddGameRequest : BaseRequest
     {
-        public string Name { get; set; }
-        public int NumberOfPlayers { get; set; }
-        public string Image { get; set; }
-        public string URL { get; set; }
+        public AddGameViewModel Game { get; set; }
     }
 }

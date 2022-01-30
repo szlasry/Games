@@ -113,7 +113,8 @@ namespace GamesApi.Logic.DataAccessLayer
                     IsLoggedIn = a.IsLoggedIn,
                     IsAdmin = a.IsAdmin??false,
                     Token = a.Token,
-                    LastSessionTime = a.LastSessionTime
+                    LastSessionTime = a.LastSessionTime,
+                    IsSuspended = a.IsSuspended
                 }).ToList();
             });
         }
@@ -127,12 +128,14 @@ namespace GamesApi.Logic.DataAccessLayer
                 {
                     Id = a.Id,
                     UserName = a.UserName,
+                    Password = a.Password,
                     Country = a.Country,
                     Birthday = a.Birthday,
                     IsLoggedIn = a.IsLoggedIn,
                     IsAdmin = a.IsAdmin??false,
                     Token = a.Token,
-                    LastSessionTime = a.LastSessionTime
+                    LastSessionTime = a.LastSessionTime,
+                    IsSuspended = a.IsSuspended
                 }).FirstOrDefault();
             });
         }
@@ -168,6 +171,44 @@ namespace GamesApi.Logic.DataAccessLayer
                 p.Add("@UserName", userName);
                 p.Add("@Token", token);
                 db.Execute("USP_UpdatePlayerStatus", p, commandType: CommandType.StoredProcedure);
+            });
+        }
+        public void SuspendPlayer(int id)
+        {
+            WithConnection((db) =>
+            {
+                var p = new DynamicParameters();
+                p.Add("@Id", id);
+                db.Execute("USP_SuspendPlayer", p, commandType: CommandType.StoredProcedure);
+            });
+        }
+        public void UnsuspendPlayer(int id)
+        {
+            WithConnection((db) =>
+            {
+                var p = new DynamicParameters();
+                p.Add("@Id", id);
+                db.Execute("USP_UnsuspendPlayer", p, commandType: CommandType.StoredProcedure);
+            });
+        }
+        public void UserUpdatePassword(string password, int id)
+        {
+            WithConnection((db) =>
+            {
+                var p = new DynamicParameters();
+                p.Add("@Id", id);
+                p.Add("@Password", password);
+                db.Execute("USP_UserUpdatePassword", p, commandType: CommandType.StoredProcedure);
+            });
+        }
+        public void UserUpdateProfile(Player player)
+        {
+            WithConnection((db) =>
+            {
+                var p = new DynamicParameters();
+                p.Add("@Id", player.Id);
+                p.Add("@Country", player.Country);
+                db.Execute("USP_UserUpdateProfile", p, commandType: CommandType.StoredProcedure);
             });
         }
 

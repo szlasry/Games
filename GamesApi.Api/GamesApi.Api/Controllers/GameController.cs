@@ -2,6 +2,7 @@
 using Games.SharedModels.Responses;
 using Games.SharedModels.Responses.GameResponses;
 using Games.SharedModels.ViewModel.GameViewModels;
+using GamesApi.Api.Models;
 using GamesApi.Logic;
 using GamesApi.Models;
 using System;
@@ -16,23 +17,24 @@ namespace GamesApi.Api.Controllers
     public class GameController : ApiController
     {
         private GamePlayerLogic _gamePlayerLogic;
+        private TokenValidator tokenValidator = new TokenValidator();
         public GameController()
         {
             _gamePlayerLogic = new GamePlayerLogic();
         }
-
+        [Route("api/Game/AddGame")]
         [HttpPost]
         //https://localhost:44322/api/Game/AddGame
         public BaseResponse AddGame(AddGameRequest request)
         {
             try
             {
-                BaseResponse baseResponse = ValidateToken(request.UserName, request.Token);
+                BaseResponse baseResponse = tokenValidator.ValidateToken(request.UserName, request.Token);
                 if (!baseResponse.IsSuccess)
                 {
                     return baseResponse;
                 }
-                bool doesExist = _gamePlayerLogic.ValidateGameExists(request.Name);
+                bool doesExist = _gamePlayerLogic.ValidateGameExists(request.Game.Name);
                 if (doesExist)
                 {
                     return new BaseResponse()
@@ -54,10 +56,10 @@ namespace GamesApi.Api.Controllers
                 }
                 _gamePlayerLogic.AddGame(new Game()
                 {
-                    Name = request.Name,
-                    NumberOfPlayers = request.NumberOfPlayers,
-                    Image = request.Image,
-                    URL = request.URL
+                    Name = request.Game.Name,
+                    NumberOfPlayers = request.Game.NumberOfPlayers,
+                    Image = request.Game.Image,
+                    URL = request.Game.URL
                 });
                 return new BaseResponse()
                 {
@@ -79,7 +81,7 @@ namespace GamesApi.Api.Controllers
         [Route("api/Game/GetGames")]
         //https://localhost:44322/api/Game/GetGames
         public GetGamesResponse GetGames()
-        {
+        {// at some point will be a limitation for banned players/ validate that the player isn't suspended.
             try
             {
 
@@ -145,14 +147,24 @@ namespace GamesApi.Api.Controllers
         }
         [HttpDelete]
         //https://localhost:44322/api/Game/DeleteGame?id=&username=&token=
-        public BaseResponse DeleteGame(int id, string userName, string token)
+        public BaseResponse DeleteGame([FromUri] DeleteGameRequest request)
         {
             try
             {
-                BaseResponse baseResponse = ValidateToken(userName, token);
+                bool isAdmin = _gamePlayerLogic.ValidatePlayerIsAdmin(request.UserName);
+                if (!isAdmin)
+                {
+                    return new BaseResponse()
+                    {
+                        ErrorCode = 200,
+                        ErrorMessage = "You ain't admin bitch",
+                        IsSuccess = false
+                    };
+                }
+                BaseResponse baseResponse = tokenValidator.ValidateToken(request.UserName, request.Token);
                 if (baseResponse.IsSuccess)
                 {
-                    _gamePlayerLogic.DeleteGame(id);
+                    _gamePlayerLogic.DeleteGame(request.Id);
                     return baseResponse;
                 }
                 return new BaseResponse()
@@ -172,19 +184,42 @@ namespace GamesApi.Api.Controllers
                 };
             }
         }
-        [HttpPut] 
+        [Route("api/Game/UpdateGame")]
+        [HttpPost] 
         //https://localhost:44322/api/Game/UpdateGame
-        public BaseResponse UpdateGame(Game game)
+        public BaseResponse UpdateGame(UpdateGameRequest request)
         {
             try
             {
-                bool didSucceed = _gamePlayerLogic.UpdateGame(game);
+                bool isAdmin = _gamePlayerLogic.ValidatePlayerIsAdmin(request.UserName);
+                if (!isAdmin)
+                {
+                    return new BaseResponse()
+                    {
+                        ErrorCode = 200,
+                        ErrorMessage = "You ain't admin bitch",
+                        IsSuccess = false
+                    };
+                }
+                BaseResponse baseResponse = tokenValidator.ValidateToken(request.UserName, request.Token);
+                if (!baseResponse.IsSuccess)
+                {
+                    return baseResponse;
+                }
+                bool didSucceed = _gamePlayerLogic.UpdateGame(new Game() 
+                {
+                    Id = request.Game.Id,
+                    Name = request.Game.Name,
+                    NumberOfPlayers = request.Game.NumberOfPlayers,
+                    Image = request.Game.Image,
+                    URL = request.Game.URL
+                });
                 if(!didSucceed)
                 {
                     return new BaseResponse()
                     {
                         ErrorCode = 4000,
-                        ErrorMessage = $"Did not Find any Game with the ID : {game.Id}",
+                        ErrorMessage = $"Did not Find any Game with the ID : {request.Game.Id}",
                         IsSuccess = false
                     };
                 }
@@ -204,45 +239,6 @@ namespace GamesApi.Api.Controllers
                     IsSuccess = false
                 };
             }
-        }
-        private BaseResponse ValidateToken(string userName, string token)
-        {
-
-            bool doesExist = _gamePlayerLogic.ValidateUsernameExists(userName);
-            if (!doesExist)
-            {
-                return new BaseResponse()
-                {
-                    ErrorCode = 6000,
-                    ErrorMessage = "Username does not exist in our DB, get fucked",
-                    IsSuccess = false
-                };
-            }
-            // add here  validation isloggedin.
-            bool doesTokenMatch = _gamePlayerLogic.ValidateTokenMatches(userName, token);
-            if (!doesTokenMatch)
-            {
-                return new BaseResponse()
-                {
-                    ErrorCode = 6000,
-                    ErrorMessage = "Token does not exist in our DB, get fucked",
-                    IsSuccess = false
-                };
-            }
-            bool didTokenExpire = _gamePlayerLogic.ValidateTokenExpiration(userName, token);
-            if (!didTokenExpire)
-            {
-                return new BaseResponse()
-                {
-                    ErrorCode = 6000,
-                    ErrorMessage = "Session expired, get fucked",
-                    IsSuccess = false
-                };
-            }
-            return new BaseResponse() 
-            {
-                IsSuccess = true
-            };
         }
     }
 }

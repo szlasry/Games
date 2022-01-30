@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var Dictionary = (Dictionary<int, List<Games.SharedModels.ViewModel.GameViewModels.GameViewModel>>)ViewBag.Games;
 }
-<div style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd04em4kRANRLhZtGzDKJtutgxh23SgGWvEQ&usqp=CAU'); ">
+<div style="background-image: linear-gradient(to right, white, black)">
     @foreach (var group in Dictionary)
     {
         <div class="card-deck">

@@ -1,4 +1,15 @@
 ﻿@model Games.SharedModels.ViewModel.GameViewModels.GameViewModel
+@{
+    Games.SharedModels.ViewModel.PlayerViewModels.PlayerViewModel player = null;
+    if (Request.Cookies["User"] != null && !string.IsNullOrEmpty(Request.Cookies["User"]["Player"]))
+    {
+        player = Newtonsoft.Json.JsonConvert.DeserializeObject<Games.SharedModels.ViewModel.PlayerViewModels.PlayerViewModel>(Request.Cookies["User"]["Player"]);
+    }
+}
+
+
+
+
 <div class="card" style="width:15rem; height:35rem;">
     <img style="height:250px;" class="img-fluid" src="@Model.Image">
     <div class="card-body">
@@ -8,14 +19,23 @@
         <hr />
         <a href="@Model.URL" target="_blank">Play @Model.Name</a>
         <hr />
-        @if (Request.Cookies["user"] == null)
+
+        @if (player == null)
         {
             <h4>Login to do shit</h4>
         }
+        else if (player.IsSuspended)
+        {
+            <h4>You are suspended, byeeeee</h4>
+        }
+        else if (player.IsAdmin)
+        {
+            <div>@Html.ActionLink("Delete Game", "DeleteGameRequest", new { Id = Model.Id })</div>
+            @Html.ActionLink("Update Game", "UpdateGame", new { Id = Model.Id })
+        }
         else
         {
-    <div>@Html.ActionLink("Delete Game", "DeleteGameRequest", new { Id = Model.Id })</div>  
-            @Html.ActionLink("Update Game", "UpdateGame", new { Id = Model.Id })
+            <h2>You ain't got no crud permissions bitch.</h2>
         }
 
 

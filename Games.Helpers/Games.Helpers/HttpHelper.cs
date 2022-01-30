@@ -17,6 +17,7 @@ namespace Games.Helpers
             {
                 HttpResponseMessage response = await client.GetAsync(path);
                 string responseString = await response.Content.ReadAsStringAsync();
+                response.EnsureSuccessStatusCode();
                 return responseString;
             }
             catch (Exception ex)
@@ -38,6 +39,8 @@ namespace Games.Helpers
             {
                 StringContent content = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.PostAsync(path, content);
+                //throws an exception if the status code is 400>
+                response.EnsureSuccessStatusCode();
                 string responseString = await response.Content.ReadAsStringAsync();
                 return responseString;
             }
@@ -60,6 +63,7 @@ namespace Games.Helpers
             {
                 StringContent content = new StringContent(serializedRequest, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await client.PutAsync(path, content);
+                response.EnsureSuccessStatusCode();
                 string responseString = await response.Content.ReadAsStringAsync();
                 return responseString;
             }
@@ -81,6 +85,7 @@ namespace Games.Helpers
             try
             {
                 HttpResponseMessage response = await client.DeleteAsync(path);
+                response.EnsureSuccessStatusCode();
                 string responseString = await response.Content.ReadAsStringAsync();
                 return responseString;
             }

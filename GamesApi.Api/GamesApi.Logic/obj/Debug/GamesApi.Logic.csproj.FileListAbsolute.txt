@@ -20,3 +20,5 @@ C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Logic\obj\Debug\Ga
 C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Logic\obj\Debug\GamesApi.Logic.pdb
 C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Logic\bin\Debug\Dapper.dll
 C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Logic\bin\Debug\Dapper.xml
+C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Logic\bin\Debug\Games.SharedModels.dll
+C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Logic\bin\Debug\Games.SharedModels.pdb

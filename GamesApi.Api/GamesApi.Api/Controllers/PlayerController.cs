@@ -1,7 +1,9 @@
-﻿using Games.SharedModels.Requests.PlayerRequests;
+﻿using Games.SharedModels.Requests;
+using Games.SharedModels.Requests.PlayerRequests;
 using Games.SharedModels.Responses;
 using Games.SharedModels.Responses.PlayerResponses;
 using Games.SharedModels.ViewModel.PlayerViewModels;
+using GamesApi.Api.Models;
 using GamesApi.Logic;
 using GamesApi.Models;
 using System;
@@ -15,14 +17,16 @@ namespace GamesApi.Api.Controllers
 {
     public class PlayerController : ApiController
     {
+        private GamePlayerLogic gamePlayerLogic = new GamePlayerLogic();
+        private TokenValidator tokenValidator = new TokenValidator();
+        [Route("api/Player/AddPlayer")]
         [HttpPost]
         //https://localhost:44322/Player/AddPlayer
         public BaseResponse AddPlayer(AddPlayerRequest request)
         {
             try
             {
-                GamePlayerLogic gameLogic = new GamePlayerLogic();
-                bool doesExist = gameLogic.ValidateUsernameExists(request.UserName);
+                bool doesExist = gamePlayerLogic.ValidateUsernameExists(request.UserName);
                 if (doesExist)
                 {
                     return new BaseResponse()
@@ -32,7 +36,7 @@ namespace GamesApi.Api.Controllers
                         IsSuccess = false
                     };
                 }
-                gameLogic.AddPlayer(new Player()
+                gamePlayerLogic.AddPlayer(new Player()
                 {
                     UserName = request.UserName,
                     Password = request.Password,
@@ -62,7 +66,6 @@ namespace GamesApi.Api.Controllers
         {
             try
             {
-                GamePlayerLogic gamePlayerLogic = new GamePlayerLogic();
                 List<Player> listOfPlayers = gamePlayerLogic.GetPlayers();
                 return new GetPlayersResponse()
                 {
@@ -72,7 +75,8 @@ namespace GamesApi.Api.Controllers
                         UserName = a.UserName,
                         Country = a.Country,
                         Birthday = a.Birthday,
-                        IsAdmin = a.IsAdmin
+                        IsAdmin = a.IsAdmin,
+                        IsSuspended = a.IsSuspended
                     }).ToList(),
                     ErrorCode = 0,
                     ErrorMessage = null,
@@ -94,7 +98,6 @@ namespace GamesApi.Api.Controllers
         {
             try
             {
-                GamePlayerLogic gamePlayerLogic = new GamePlayerLogic();
                 Player player = gamePlayerLogic.GetPlayer(id);
                 return new GetPlayerResponse()
                 {
@@ -104,7 +107,8 @@ namespace GamesApi.Api.Controllers
                         UserName = player.UserName,
                         Country = player.Country,
                         Birthday = player.Birthday,
-                        IsAdmin = player.IsAdmin
+                        IsAdmin = player.IsAdmin,
+                        IsSuspended = player.IsSuspended
                     },
                     ErrorCode = 0,
                     ErrorMessage = null,
@@ -123,12 +127,16 @@ namespace GamesApi.Api.Controllers
         }
         [HttpDelete]
         //https://localhost:44322/Player/DeletePlayer?id=
-        public BaseResponse DeletePlayer(int id)
+        public BaseResponse DeletePlayer([FromUri] DeletePlayerRequest request)
         {
             try
             {
-                GamePlayerLogic gamePlayerLogic = new GamePlayerLogic();
-                gamePlayerLogic.DeletePlayer(id);
+                BaseResponse baseResponse = tokenValidator.ValidateToken(request.UserName, request.Token);
+                if (!baseResponse.IsSuccess)
+                {
+                    return baseResponse;
+                }
+                gamePlayerLogic.DeletePlayer(request.Id);
                 return new BaseResponse()
                 {
                     ErrorCode = 0,
@@ -146,14 +154,125 @@ namespace GamesApi.Api.Controllers
                 };
             }
         }
-        [HttpPut]
-        //https://localhost:44322/Player/UpdatePlayer
-        public BaseResponse UpdatePlayer(Player player)
+        //[Route("api/Player/UpdatePlayer")]
+        //[HttpPost]
+        ////https://localhost:44322/Player/UpdatePlayer
+        //public BaseResponse UpdatePlayer(Player player)
+        //{
+        //    try
+        //    {
+        //        gamePlayerLogic.UpdatePlayer(player);
+        //        return new BaseResponse()
+        //        {
+        //            ErrorCode = 0,
+        //            ErrorMessage = null,
+        //            IsSuccess = true
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return new BaseResponse
+        //        {
+        //            ErrorCode = 5000,
+        //            ErrorMessage = ex.Message,
+        //            IsSuccess = false
+        //        };
+        //    }
+        //}
+        //https://localhost:44322/api/Player/SuspendPlayer
+        [Route("api/Player/SuspendPlayer")]
+        [HttpPost]
+        public BaseResponse SuspendPlayer(SuspendPlayerRequest request)
         {
-            try
+            BaseResponse baseResponse = tokenValidator.ValidateToken(request.UserName, request.Token);
+            if (!baseResponse.IsSuccess)
             {
-                GamePlayerLogic gamePlayerLogic = new GamePlayerLogic();
-                gamePlayerLogic.UpdatePlayer(player);
+                return new BaseResponse
+                {
+                    ErrorCode = 100,
+                    ErrorMessage = "Username and token have been deemed unworthy",
+                    IsSuccess = false
+                };
+            }
+            else
+            {
+                gamePlayerLogic.SuspendPlayer(request.TargetPlayerId);
+                return new BaseResponse
+                {
+                    ErrorCode = 0,
+                    ErrorMessage = null,
+                    IsSuccess = true
+                };
+            }
+        }
+        [Route("api/Player/UnsuspendPlayer")]
+        [HttpPost]
+        public BaseResponse UnsuspendPlayer(UnsuspendPlayerRequest request)
+        {
+            BaseResponse baseResponse = tokenValidator.ValidateToken(request.UserName, request.Token);
+            if (!baseResponse.IsSuccess)
+            {
+                return new BaseResponse
+                {
+                    ErrorCode = 100,
+                    ErrorMessage = "Username and token have been deemed unworthy",
+                    IsSuccess = false
+                };
+            }
+            else
+            {
+                gamePlayerLogic.UnsuspendPlayer(request.TargetPlayerId);
+                return new BaseResponse
+                {
+                    ErrorCode = 0,
+                    ErrorMessage = null,
+                    IsSuccess = true
+                };
+            }
+        }
+        [Route("api/Player/UserUpdateProfile")]
+        [HttpPost]
+        public BaseResponse UserUpdateProfile(UpdateProfileRequest request)
+        {
+            BaseResponse baseResponse = tokenValidator.ValidateToken(request.UserName, request.Token);
+            if (!baseResponse.IsSuccess)
+            {
+                return baseResponse;
+            }
+            gamePlayerLogic.UserUpdateProfile(new Player() 
+            {
+                Id = request.Player.Id,
+                Country = request.Player.Country
+            });
+            return new BaseResponse()
+            {
+                ErrorCode = 0,
+                ErrorMessage = null,
+                IsSuccess = true
+            };
+        }
+        [Route("api/Player/UserUpdatePassword")]
+        [HttpPost]
+        public BaseResponse UserUpdatePassword(UpdatePasswordRequest request)
+        {
+            BaseResponse baseResponse = tokenValidator.ValidateToken(request.UserName, request.Token);
+            if (!baseResponse.IsSuccess)
+            {
+                return baseResponse;
+            }
+            Player playerFromDB = gamePlayerLogic.GetPlayer(request.Id);
+            if (Hash.CreateMD5(request.OldPassword) != playerFromDB.Password)
+            {
+                return new BaseResponse()
+                {
+                    ErrorCode = 600,
+                    ErrorMessage = "You entered the wrong password",
+                    IsSuccess = false
+                };
+            }
+            else
+            {
+                gamePlayerLogic.UserUpdatePassword(Hash.CreateMD5(request.NewPassword), request.Id);
                 return new BaseResponse()
                 {
                     ErrorCode = 0,
@@ -161,25 +280,16 @@ namespace GamesApi.Api.Controllers
                     IsSuccess = true
                 };
             }
-            catch (Exception ex)
-            {
-                return new BaseResponse
-                {
-                    ErrorCode = 5000,
-                    ErrorMessage = ex.Message,
-                    IsSuccess = false
-                };
-            }
+
         }
         //https://localhost:44322/api/Player/LogIn
         [Route("api/Player/LogIn")]
         [HttpPost]
-        public LoginPlayerResponse LogIn(Player player)
+        public LoginPlayerResponse LogIn(LoginRequest request)
         {
             try
             {
-                GamePlayerLogic gamePlayerLogic = new GamePlayerLogic();
-                bool doesNameExist = gamePlayerLogic.ValidateUsernameExists(player.UserName);
+                bool doesNameExist = gamePlayerLogic.ValidateUsernameExists(request.UserName);
                 if (!doesNameExist)
                 {
                     return new LoginPlayerResponse()
@@ -189,7 +299,7 @@ namespace GamesApi.Api.Controllers
                         IsSuccess = false
                     };
                 }
-                bool isPasswordCorrect = gamePlayerLogic.IsPasswordCorrect(player);
+                bool isPasswordCorrect = gamePlayerLogic.IsPasswordCorrect(request);
                 if (!isPasswordCorrect)
                 {
                     return new LoginPlayerResponse()
@@ -199,7 +309,7 @@ namespace GamesApi.Api.Controllers
                         IsSuccess = false
                     };
                 }
-                bool isLoggedIn = gamePlayerLogic.IsLoggedIn(player);
+                bool isLoggedIn = gamePlayerLogic.IsLoggedIn(request);
                 if (isLoggedIn)
                 {
                     return new LoginPlayerResponse()
@@ -209,14 +319,25 @@ namespace GamesApi.Api.Controllers
                         IsSuccess = false
                     };
                 }
+                List<Player> listOfPlayers = gamePlayerLogic.GetPlayers();
+                Player dbPlayer = listOfPlayers.FirstOrDefault(a => a.UserName == request.UserName);
                 string token = Guid.NewGuid().ToString();
-                gamePlayerLogic.UpdatePlayerStatus(player.UserName, true, token);
+                gamePlayerLogic.UpdatePlayerStatus(request.UserName, true, token);
                 return new LoginPlayerResponse()
                 {
                     ErrorCode = 0,
                     ErrorMessage = null,
                     IsSuccess = true,
-                    Token = token
+                    Player = new PlayerViewModel
+                    {
+                        Id = dbPlayer.Id,
+                        UserName = dbPlayer.UserName,
+                        Country = dbPlayer.Country,
+                        Birthday = dbPlayer.Birthday,
+                        IsAdmin = dbPlayer.IsAdmin,
+                        Token = token,
+                        IsSuspended = dbPlayer.IsSuspended
+                    }
                 };
             }
             catch (Exception ex)
@@ -232,12 +353,11 @@ namespace GamesApi.Api.Controllers
         [Route("api/Player/LogOut")]
         [HttpPost]
         //https://localhost:44322/api/Player/LogOut
-        public BaseResponse LogOut(Player player)
+        public BaseResponse LogOut(BaseRequest request)
         {
             try
             {
-                GamePlayerLogic gamePlayerLogic = new GamePlayerLogic();
-                if (!gamePlayerLogic.ValidateUsernameExists(player.UserName))
+                if (!gamePlayerLogic.ValidateUsernameExists(request.UserName))
                 {
                     return new BaseResponse()
                     {
@@ -246,7 +366,10 @@ namespace GamesApi.Api.Controllers
                         IsSuccess = false
                     };
                 }
-                if (!gamePlayerLogic.IsLoggedIn(player))
+                if (!gamePlayerLogic.IsLoggedIn(new LoginRequest()
+                {
+                    UserName = request.UserName
+                }))
                 {
                     return new BaseResponse()
                     {
@@ -255,7 +378,7 @@ namespace GamesApi.Api.Controllers
                         IsSuccess = false
                     };
                 }
-                gamePlayerLogic.UpdatePlayerStatus(player.UserName, false, null);
+                gamePlayerLogic.UpdatePlayerStatus(request.UserName, false, null);
                 return new BaseResponse()
                 {
                     ErrorCode = 0,

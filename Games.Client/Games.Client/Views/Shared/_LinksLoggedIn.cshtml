@@ -1,13 +1,36 @@
-﻿@if (Request.Cookies["user"] == null)
+﻿@{
+    Games.SharedModels.ViewModel.PlayerViewModels.PlayerViewModel player = null;
+    if (Request.Cookies["User"] != null && !string.IsNullOrEmpty(Request.Cookies["User"]["Player"]))
+    {
+        player = Newtonsoft.Json.JsonConvert.DeserializeObject<Games.SharedModels.ViewModel.PlayerViewModels.PlayerViewModel>(Request.Cookies["User"]["Player"]);
+    }
+}
+
+
+
+@if (player == null)
 {
     <h6>Navigation Links</h6>
-    <div> @Html.ActionLink("Main page", "Index", "Home")  </div>
-    <div> @Html.ActionLink("About Us", "AboutUs", "Home")  </div>
+    <div style="font-size:12px;"> @Html.ActionLink("Main page", "Index", "Home")  </div>
+    <div style="font-size:12px;"> @Html.ActionLink("About Us", "AboutUs", "Home")  </div>
+}
+else if (player.IsAdmin)
+{
+    <h6>Navigation Links</h6>
+    <div style="font-size:12px;"> @Html.ActionLink("Add Game", "AddGame", "Home")</div>
+    <div style="font-size:12px;"> @Html.ActionLink("Manage Players", "ManagePlayers", "Home")</div>
+    <div style="font-size:12px;"> @Html.ActionLink("Edit Profile", "UserUpdateProfile", new { id = player.Id })  </div>
+    <div style="font-size:12px;"> @Html.ActionLink("Edit Password", "UserUpdatePassword", new { id = player.Id })  </div>
+    <div style="font-size:12px;"> @Html.ActionLink("Main page", "Index", "Home")  </div>
+    <div style="font-size:12px;"> @Html.ActionLink("About Us", "AboutUs", "Home")  </div>
 }
 else
 {
     <h6>Navigation Links</h6>
-    <div> @Html.ActionLink("Add Game", "AddGame", "Home")</div>
+    <div style="font-size:12px;"> @Html.ActionLink("Edit Profile", "UserUpdateProfile", new { id = player.Id })  </div>
+    <div style="font-size:12px;"> @Html.ActionLink("Edit Password", "UserUpdatePassword", new { id = player.Id })  </div>
+    <div style="font-size:12px;"> @Html.ActionLink("Main page", "Index", "Home")  </div>
+    <div style="font-size:12px;"> @Html.ActionLink("About Us", "AboutUs", "Home")  </div>
 }
 
 

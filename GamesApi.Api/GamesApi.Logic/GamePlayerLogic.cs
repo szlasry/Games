@@ -1,7 +1,9 @@
-﻿using GamesApi.Logic.DataAccessLayer;
+﻿using Games.SharedModels.Requests.PlayerRequests;
+using GamesApi.Logic.DataAccessLayer;
 using GamesApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -86,18 +88,18 @@ namespace GamesApi.Logic
             _gamePlayerAccessLayer.UpdatePlayerStatus(userName, status, token);
         }
 
-        public bool IsLoggedIn(Player player)
+        public bool IsLoggedIn(LoginRequest request)
         {
             List<Player> listOfPlayers = GetPlayers();
-            var isLoggedIn = listOfPlayers.Any(dbPlayer => dbPlayer.UserName == player.UserName && dbPlayer.IsLoggedIn);
+            bool isLoggedIn = listOfPlayers.Any(dbPlayer => dbPlayer.UserName == request.UserName && dbPlayer.IsLoggedIn);
             return isLoggedIn;
         }
-        public bool IsPasswordCorrect(Player player)
+        public bool IsPasswordCorrect(LoginRequest request)
         {
             List<Player> listOfPlayers = GetPlayers();
             foreach (Player dbPlayer in listOfPlayers)
             {
-                if (dbPlayer.UserName == player.UserName && dbPlayer.Password == Hash.CreateMD5(player.Password))
+                if (dbPlayer.UserName == request.UserName && dbPlayer.Password == Hash.CreateMD5(request.Password))
                 {
                     return true;
                 }
@@ -120,9 +122,10 @@ namespace GamesApi.Logic
         public bool ValidateTokenExpiration(string userName, string token)
         {
             List<Player> listOfPlayers = _gamePlayerAccessLayer.GetPlayers();
+            int expirationTimeInMinutes = int.Parse(ConfigurationManager.AppSettings["SessionExpireInMinutes"]);
             foreach (Player player in listOfPlayers)
             {
-                if (player.UserName == userName && player.Token == token && player.LastSessionTime < DateTime.UtcNow.AddMinutes(-30))
+                if (player.UserName == userName && player.Token == token && player.LastSessionTime < DateTime.UtcNow.AddMinutes(expirationTimeInMinutes))
                 {
                     return false;
                 }
@@ -137,6 +140,22 @@ namespace GamesApi.Logic
                 return false;
             }
             return player.IsAdmin;
+        }
+        public void SuspendPlayer(int id)
+        {
+            _gamePlayerAccessLayer.SuspendPlayer(id);
+        }
+        public void UnsuspendPlayer(int id)
+        {
+            _gamePlayerAccessLayer.UnsuspendPlayer(id);
+        }
+        public void UserUpdatePassword(string password, int id)
+        {
+            _gamePlayerAccessLayer.UserUpdatePassword(password, id);
+        }
+        public void UserUpdateProfile(Player player)
+        {
+            _gamePlayerAccessLayer.UserUpdateProfile(player);
         }
     }
 }

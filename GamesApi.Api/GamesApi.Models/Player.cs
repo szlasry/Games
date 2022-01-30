@@ -17,6 +17,7 @@ namespace GamesApi.Models
         public bool IsAdmin { get; set; }
         public string Token { get; set; }
         public DateTime? LastSessionTime { get; set; }
+        public bool IsSuspended { get; set; }
 
     }
 }

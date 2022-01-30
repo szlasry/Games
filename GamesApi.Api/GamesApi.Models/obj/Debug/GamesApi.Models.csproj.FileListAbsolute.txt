@@ -9,4 +9,3 @@ C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Models\bin\Debug\G
 C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Models\obj\Debug\GamesApi.Models.csproj.CoreCompileInputs.cache
 C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Models\obj\Debug\GamesApi.Models.dll
 C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Models\obj\Debug\GamesApi.Models.pdb
-C:\Users\szlas\Documents\Projects\Games\GamesApi.Api\GamesApi.Models\obj\Debug\GamesApi.Models.csproj.AssemblyReference.cache

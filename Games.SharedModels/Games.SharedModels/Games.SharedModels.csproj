@@ -44,17 +44,30 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\BaseRequest.cs" />
     <Compile Include="Requests\GameRequests\AddGameRequest.cs" />
+    <Compile Include="Requests\GameRequests\DeleteGameRequest.cs" />
     <Compile Include="Requests\GameRequests\UpdateGameRequest.cs" />
     <Compile Include="Requests\PlayerRequests\AddPlayerRequest.cs" />
+    <Compile Include="Requests\PlayerRequests\DeletePlayerRequest.cs" />
+    <Compile Include="Requests\PlayerRequests\LoginRequest.cs" />
+    <Compile Include="Requests\PlayerRequests\SuspendPlayerRequest.cs" />
+    <Compile Include="Requests\PlayerRequests\UnsuspendPlayerRequest.cs" />
+    <Compile Include="Requests\PlayerRequests\UpdatePasswordRequest.cs" />
+    <Compile Include="Requests\PlayerRequests\UpdateProfileRequest.cs" />
     <Compile Include="Responses\BaseResponse.cs" />
     <Compile Include="Responses\GameResponses\GetGameResponse.cs" />
     <Compile Include="Responses\GameResponses\GetGamesResponse.cs" />
     <Compile Include="Responses\PlayerResponses\GetPlayerResponse.cs" />
     <Compile Include="Responses\PlayerResponses\GetPlayersResponse.cs" />
     <Compile Include="Responses\PlayerResponses\LoginPlayerResponse.cs" />
+    <Compile Include="ViewModel\GameViewModels\AddGameViewModel.cs" />
     <Compile Include="ViewModel\GameViewModels\GameViewModel.cs" />
     <Compile Include="ViewModel\PlayerViewModels\PlayerViewModel.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\GamesApi.Api\GamesApi.Models\GamesApi.Models.csproj">
+      <Project>{C28AB84F-BA60-4240-9679-C8918C680B45}</Project>
+      <Name>GamesApi.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

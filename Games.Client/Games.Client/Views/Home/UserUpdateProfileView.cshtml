@@ -1,0 +1,29 @@
+﻿@model Games.SharedModels.ViewModel.PlayerViewModels.PlayerViewModel
+
+@{
+    ViewBag.Title = "UserUpdatePlayerView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @using (Html.BeginForm("UserUpdateProfileRequest", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(a => a.Id);
+        <table cellpadding="1" cellspacing="1">
+            <tr>
+                <td>@Html.LabelFor(p => p.Country)</td>
+                <td>
+                    @Html.EditorFor(m => m.Country)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(p => p.Country)
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Submit" /></td>
+            </tr>
+        </table>
+    }
+</div>
+

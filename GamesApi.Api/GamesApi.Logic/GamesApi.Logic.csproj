@@ -35,6 +35,7 @@
       <HintPath>..\..\..\..\..\source\repos\Games\packages\Dapper.2.0.123\lib\net461\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -51,6 +52,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Games.SharedModels\Games.SharedModels\Games.SharedModels.csproj">
+      <Project>{9C468772-CAF7-49B8-915E-4DAAC315B103}</Project>
+      <Name>Games.SharedModels</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GamesApi.Models\GamesApi.Models.csproj">
       <Project>{C28AB84F-BA60-4240-9679-C8918C680B45}</Project>
       <Name>GamesApi.Models</Name>

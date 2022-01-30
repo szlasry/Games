@@ -13,5 +13,7 @@ namespace Games.SharedModels.ViewModel.PlayerViewModels
         public string Country { get; set; }
         public DateTime Birthday { get; set; }
         public bool IsAdmin { get; set; }
+        public string Token  { get; set; }
+        public bool IsSuspended { get; set; }
     }
 }

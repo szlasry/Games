@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Games.SharedModels.ViewModel.PlayerViewModels.PlayerViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ManagePlayersView</title>
+</head>
+<body>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Birthday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsAdmin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsSuspended)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Country)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Birthday)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsAdmin)
+                </td>
+                <th>
+                    @Html.DisplayFor(modelItem => item.IsSuspended)
+                </th>
+                @if (item.IsAdmin)
+                {
+                    <td>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @if (item.IsSuspended)
+                        {
+                            @Html.ActionLink("Unsuspend", "AdminUnsuspendPlayer", new { id = item.Id })
+                        }
+                    </td>
+                    <td>
+                        @if (!item.IsSuspended)
+                        {
+                            @Html.ActionLink("Suspend", "AdminSuspendPlayer", new { id = item.Id })
+                        }
+                        @Html.ActionLink("Delete", "AdminDeletePlayer", new { id = item.Id })
+                    </td>
+                }
+            </tr>
+        }
+
+    </table>
+</body>
+</html>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GamesApi.Logic
 {
-    public class Hash
+    public static class Hash
     {
         public static string CreateMD5(string input)
         {
